@@ -93,31 +93,61 @@ def main():
         ]
     )
 
-    Y_test_roll, Y_pred_roll = run_rolling_forecast(
-    rolling_model,
-    X_full,
-    Y_full,
-    train_window=60,  # 5-year rolling window
+    # --- Expanding window ---
+    Y_test_exp, Y_pred_exp = run_rolling_forecast(
+        rolling_model,
+        X_full,
+        Y_full,
+        train_window=None,  # expanding window
     )
 
-
-    print("\nPer-asset directional accuracy (rolling):")
+    print("\nPer-asset directional accuracy (expanding):")
     print(
         compute_directional_accuracy(
-            Y_test_roll, Y_pred_roll.to_numpy()
+            Y_test_exp, Y_pred_exp.to_numpy()
         ).to_string(index=False)
     )
 
-    roll_eval = backtest_rotation_strategy(
-        Y_test_roll, Y_pred_roll.to_numpy(), exclude_spy=True
+    roll_eval_exp = backtest_rotation_strategy(
+        Y_test_exp, Y_pred_exp.to_numpy(), exclude_spy=True
     )
 
-    print("\nRolling rotation strategy evaluation (vs SPY):")
-    print(f"Hit rate (correct winner %): {roll_eval['hit_rate']:.2%}")
+    print("\nExpanding-window rotation strategy evaluation (vs SPY):")
+    print(f"Hit rate (correct winner %): {roll_eval_exp['hit_rate']:.2%}")
     print(
-        f"Cumulative excess return:    {roll_eval['cumulative_excess_return']:.2%}"
+        f"Cumulative excess return:    {roll_eval_exp['cumulative_excess_return']:.2%}"
     )
-    print(f"Annualized Sharpe (excess): {roll_eval['annualized_sharpe']:.2f}")
+    print(f"Annualized Sharpe (excess): {roll_eval_exp['annualized_sharpe']:.2f}")
+
+    # --- 60-month rolling window ---
+    print("\n" + "=" * 70)
+    print("Rolling Window Forecast – Linear Regression (60-month window)")
+    print("=" * 70)
+
+    Y_test_60, Y_pred_60 = run_rolling_forecast(
+        rolling_model,
+        X_full,
+        Y_full,
+        train_window=60,  # 5-year rolling window
+    )
+
+    print("\nPer-asset directional accuracy (60-month):")
+    print(
+        compute_directional_accuracy(
+            Y_test_60, Y_pred_60.to_numpy()
+        ).to_string(index=False)
+    )
+
+    roll_eval_60 = backtest_rotation_strategy(
+        Y_test_60, Y_pred_60.to_numpy(), exclude_spy=True
+    )
+
+    print("\n60-month rolling rotation strategy evaluation (vs SPY):")
+    print(f"Hit rate (correct winner %): {roll_eval_60['hit_rate']:.2%}")
+    print(
+        f"Cumulative excess return:    {roll_eval_60['cumulative_excess_return']:.2%}"
+    )
+    print(f"Annualized Sharpe (excess): {roll_eval_60['annualized_sharpe']:.2f}")
 
 
 if __name__ == "__main__":
