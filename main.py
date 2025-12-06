@@ -93,13 +93,13 @@ def main():
         ]
     )
 
-    # Expanding window: train_window=None
     Y_test_roll, Y_pred_roll = run_rolling_forecast(
-        rolling_model,
-        X_full,
-        Y_full,
-        train_window=None,  # change to e.g. 60 for 5-year rolling window
+    rolling_model,
+    X_full,
+    Y_full,
+    train_window=60,  # 5-year rolling window
     )
+
 
     print("\nPer-asset directional accuracy (rolling):")
     print(
