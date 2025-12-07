@@ -69,23 +69,26 @@ def main():
     print("=" * 70)
     print(summary_df.to_string(index=False))
 
+    # Save static model comparison results to CSV
+    summary_df.to_csv("results/model_comparison.csv", index=False)
+
     # 2) Rolling / expanding window forecast (example with Linear Regression)
     print("\n" + "=" * 70)
     print("Rolling Window Forecast – Linear Regression (expanding)")
     print("=" * 70)
 
-    # uzmi bilo koji rezultat (svi imaju isti X/Y split)
+    # Uzmemo bilo koji rezultat (svi modeli imaju isti X/Y split)
     any_result = next(iter(all_results.values()))
     X_train = any_result["X_train"]
     X_test = any_result["X_test"]
     Y_train = any_result["Y_train"]
     Y_test = any_result["Y_test"]
 
-    # full sample (train + test)
+    # Full sample (train + test)
     X_full = pd.concat([X_train, X_test])
     Y_full = pd.concat([Y_train, Y_test])
 
-    # Linear Regression with scaling (isti kao gore)
+    # Linear Regression with scaling (isti setup kao u models.py)
     rolling_model = Pipeline(
         [
             ("scaler", StandardScaler()),
@@ -128,7 +131,7 @@ def main():
         rolling_model,
         X_full,
         Y_full,
-        train_window=60,  # 5-year rolling window
+        train_window=60,  # zadnjih 60 mjeseci ≈ 5 godina
     )
 
     print("\nPer-asset directional accuracy (60-month):")
@@ -148,6 +151,30 @@ def main():
         f"Cumulative excess return:    {roll_eval_60['cumulative_excess_return']:.2%}"
     )
     print(f"Annualized Sharpe (excess): {roll_eval_60['annualized_sharpe']:.2f}")
+
+    # Summary table for rolling setups (expanding vs 60-month)
+    rolling_summary = pd.DataFrame(
+        [
+            {
+                "setup": "expanding_window",
+                "hit_rate": roll_eval_exp["hit_rate"],
+                "cumulative_excess_return": roll_eval_exp["cumulative_excess_return"],
+                "annualized_sharpe": roll_eval_exp["annualized_sharpe"],
+            },
+            {
+                "setup": "rolling_60_months",
+                "hit_rate": roll_eval_60["hit_rate"],
+                "cumulative_excess_return": roll_eval_60["cumulative_excess_return"],
+                "annualized_sharpe": roll_eval_60["annualized_sharpe"],
+            },
+        ]
+    )
+
+    print("\nRolling setups summary:")
+    print(rolling_summary.to_string(index=False))
+
+    # Save rolling performance comparison to CSV
+    rolling_summary.to_csv("results/rolling_summary.csv", index=False)
 
 
 if __name__ == "__main__":
