@@ -63,7 +63,8 @@ def main():
                 "annualized_sharpe": sharpe,
             }
         )
-
+    
+    # Combining performance metrics of all 3 models in a csv table
     summary_df = pd.DataFrame(summary_rows)
     print("\n" + "=" * 70)
     print("Model comparison summary (test period)")
