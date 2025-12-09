@@ -128,18 +128,20 @@ def main():
     )
     print(f"Annualized Sharpe (excess): {roll_eval_exp['annualized_sharpe']:.2f}")
 
-    # --- 60-month rolling window ---
+    # 60-month rolling window forecast
     print("\n" + "=" * 70)
     print("Rolling Window Forecast – Linear Regression (60-month window)")
     print("=" * 70)
 
+    # Running a forecast using a fixed 60-month rolling window
     Y_test_60, Y_pred_60 = run_rolling_forecast(
         rolling_model,
         X_full,
         Y_full,
-        train_window=60,  # zadnjih 60 mjeseci ≈ 5 godina
+        train_window=60,  # Last 60 months
     )
 
+    # Giving directional accuracy under the 60-month rollling window
     print("\nPer-asset directional accuracy (60-month):")
     print(
         compute_directional_accuracy(
@@ -147,10 +149,12 @@ def main():
         ).to_string(index=False)
     )
 
+    # Evaluation through the backtest rotation-strategy
     roll_eval_60 = backtest_rotation_strategy(
         Y_test_60, Y_pred_60.to_numpy(), exclude_spy=True
     )
 
+    # Printing metrics
     print("\n60-month rolling rotation strategy evaluation (vs SPY):")
     print(f"Hit rate (correct winner %): {roll_eval_60['hit_rate']:.2%}")
     print(
