@@ -90,7 +90,7 @@ def main():
     X_full = pd.concat([X_train, X_test])
     Y_full = pd.concat([Y_train, Y_test])
 
-    # Linear Regression with scaling (isti setup kao u models.py)
+    # Linear Regression with scaling (same setup as in models.py)
     rolling_model = Pipeline(
         [
             ("scaler", StandardScaler()),
@@ -98,7 +98,8 @@ def main():
         ]
     )
 
-    # --- Expanding window ---
+    # Expanding window forecast 
+    # Rolling forecast where the training window keeps expanding over time
     Y_test_exp, Y_pred_exp = run_rolling_forecast(
         rolling_model,
         X_full,
@@ -106,6 +107,7 @@ def main():
         train_window=None,  # expanding window
     )
 
+    # Per-asset directional accuracy for the expanding window forecast
     print("\nPer-asset directional accuracy (expanding):")
     print(
         compute_directional_accuracy(
@@ -113,10 +115,12 @@ def main():
         ).to_string(index=False)
     )
 
+    # Rotation strategy backtest
     roll_eval_exp = backtest_rotation_strategy(
         Y_test_exp, Y_pred_exp.to_numpy(), exclude_spy=True
     )
 
+    # Performance metrics of rotation strategy vs SPY benchmark
     print("\nExpanding-window rotation strategy evaluation (vs SPY):")
     print(f"Hit rate (correct winner %): {roll_eval_exp['hit_rate']:.2%}")
     print(
