@@ -74,19 +74,19 @@ def main():
     # Save static model comparison results to CSV
     summary_df.to_csv("results/model_comparison.csv", index=False)
 
-    # 2) Rolling / expanding window forecast (example with Linear Regression)
+    # Rolling-window evaluation of Linear Regression  
     print("\n" + "=" * 70)
     print("Rolling Window Forecast – Linear Regression (expanding)")
     print("=" * 70)
 
-    # Uzmemo bilo koji rezultat (svi modeli imaju isti X/Y split)
+    # Pull X_train, X_test, Y_train, and Y_test from any model since they have same X/Y split
     any_result = next(iter(all_results.values()))
     X_train = any_result["X_train"]
     X_test = any_result["X_test"]
     Y_train = any_result["Y_train"]
     Y_test = any_result["Y_test"]
 
-    # Full sample (train + test)
+    # Combining splits into a full dataset
     X_full = pd.concat([X_train, X_test])
     Y_full = pd.concat([Y_train, Y_test])
 
