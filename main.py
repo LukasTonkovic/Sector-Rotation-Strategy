@@ -9,17 +9,18 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 
-
+# The entry point of the project, model comparison and rolling-window evaluation
 def main():
     print("=" * 70)
     print("Sector Rotation Project – Model Comparison")
     print("=" * 70)
 
-    # 1) Static train/test comparison for 3 models
+    # Training 3 models, using a time-based split
+    # Until 12/2018 = train, after = test 
     all_results = run_all_models(split_period="2018-12")
 
     summary_rows = []
-
+    # Loop trough the models, retrieve splits and predictions, and prints metrics
     for name, res in all_results.items():
         print("\n" + "-" * 70)
         print(f"Model: {name}")
@@ -37,12 +38,12 @@ def main():
         print("\nPer-asset test metrics (MSE, R^2):")
         print(metrics.to_string(index=False))
 
-        # Directional accuracy (static model)
+        # Computing directional accuracy (so +/-)
         dir_acc = compute_directional_accuracy(Y_test, Y_pred)
         print("\nPer-asset directional accuracy:")
         print(dir_acc.to_string(index=False))
 
-        # Portfolio-style evaluation: rotation strategy
+        # Rotation strategyt backtest evaluation: practical usefulness of the models
         eval_res = backtest_rotation_strategy(Y_test, Y_pred, exclude_spy=True)
 
         hit_rate = eval_res["hit_rate"]
