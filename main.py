@@ -188,5 +188,6 @@ def main():
     rolling_summary.to_csv("results/rolling_summary.csv", index=False)
 
 
+# Specifying that main() executes only when the script is run directly 
 if __name__ == "__main__":
     main()
