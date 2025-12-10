@@ -162,7 +162,7 @@ def main():
     )
     print(f"Annualized Sharpe (excess): {roll_eval_60['annualized_sharpe']:.2f}")
 
-    # Summary table for rolling setups (expanding vs 60-month)
+    # Comparing 2 rolling forecast setups (expanding vs 60 months) in a summary table
     rolling_summary = pd.DataFrame(
         [
             {
@@ -180,10 +180,11 @@ def main():
         ]
     )
 
+    # Printing a summary
     print("\nRolling setups summary:")
     print(rolling_summary.to_string(index=False))
 
-    # Save rolling performance comparison to CSV
+    # Saving the comparison to CSV
     rolling_summary.to_csv("results/rolling_summary.csv", index=False)
 
 
