@@ -43,7 +43,7 @@ def main():
         print("\nPer-asset directional accuracy:")
         print(dir_acc.to_string(index=False))
 
-        # Rotation strategyt backtest evaluation: practical usefulness of the models
+        # Rotation strategy backtest evaluation: practical usefulness of the models
         eval_res = backtest_rotation_strategy(Y_test, Y_pred, exclude_spy=True)
 
         hit_rate = eval_res["hit_rate"]
