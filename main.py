@@ -141,7 +141,7 @@ def main():
         train_window=60,  # Last 60 months
     )
 
-    # Giving directional accuracy under the 60-month rollling window
+    # Giving directional accuracy under the 60-month rolling window
     print("\nPer-asset directional accuracy (60-month):")
     print(
         compute_directional_accuracy(
