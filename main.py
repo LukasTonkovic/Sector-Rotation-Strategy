@@ -20,7 +20,7 @@ def main():
     all_results = run_all_models(split_period="2018-12")
 
     summary_rows = []
-    # Loop trough the models, retrieve splits and predictions, and prints metrics
+    # Loop through the models, retrieve splits and predictions, and prints metrics
     for name, res in all_results.items():
         print("\n" + "-" * 70)
         print(f"Model: {name}")
@@ -191,3 +191,4 @@ def main():
 # Specifying that main() executes only when the script is run directly 
 if __name__ == "__main__":
     main()
+
