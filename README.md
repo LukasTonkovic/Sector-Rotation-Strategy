@@ -29,6 +29,7 @@ Sector-Rotation-Strategy/
 ├── figures/               # Figures for report
 ├── requirements.txt       # Project dependencies
 └── README.md              # Setup and usage instructions
+---
 
 ## Results
 Model comparison on the test period (2019–2025) shows:
