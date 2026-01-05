@@ -29,9 +29,9 @@ Sector-Rotation-Strategy/
 ├── figures/               # Figures for report
 ├── requirements.txt       # Project dependencies
 └── README.md              # Setup and usage instructions
----
-
-## Results
+```
+## Results 
+```text
 Model comparison on the test period (2019–2025) shows:
 
 - Linear Regression  
@@ -48,6 +48,7 @@ Model comparison on the test period (2019–2025) shows:
   - Rotation hit rate: 17.7%  
   - Cumulative excess return vs SPY: −38.63%  
   - Annualized Sharpe (excess): −0.28  
+```
 
 ## Requirements
 - Python 3.10+
