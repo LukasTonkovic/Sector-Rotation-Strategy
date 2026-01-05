@@ -20,6 +20,7 @@ Expected output:
 - CSV files saved to results/model_comparison.csv and results/rolling_summary.csv
 
 ## Project Structure
+'''text
 Sector-Rotation-Strategy/
 ├── main.py                # Main entry point
 ├── src/                   # Source code
