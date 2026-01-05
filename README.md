@@ -5,12 +5,6 @@ Which machine learning model can, and to what extent, correctly predict the mont
 
 ## Setup
 
-### Create environment
-python3 -m venv .venv
-source .venv/bin/activate        # macOS / Linux
-.venv\Scripts\activate           # Windows
-pip install -r requirements.txt
-
 ## Usage
 Run the main entry point using Python 3: python3 main.py
 
@@ -20,7 +14,7 @@ Expected output:
 - CSV files saved to results/model_comparison.csv and results/rolling_summary.csv
 
 ## Project Structure
-'''text
+```text
 Sector-Rotation-Strategy/
 ├── main.py                # Main entry point
 ├── src/                   # Source code
