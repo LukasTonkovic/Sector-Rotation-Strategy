@@ -56,7 +56,7 @@ Model comparison on the test period (2019–2025) shows:
   - Annualized Sharpe (excess): −0.28 
 
 ```
-Overall, none of the models consistently outperform the SPY benchmark, indicating limited exploitable predictability in sector returns, in line with market efficiency hypothesis.
+Overall, none of the models consistently outperform the SPY benchmark, indicating limited exploitable predictability in sector returns, in line with the market efficiency hypothesis.
 
 ## Requirements
 - Python 3.10+
