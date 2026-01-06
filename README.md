@@ -3,15 +3,21 @@
 ## Research Question
 Which machine learning model can, and to what extent, correctly predict the monthly stock returns of different sectors based on historical data: Linear Regression, Ridge Regression, or Random Forest?
 
-## Setup
-
 ## Usage
-Run the main entry point using Python 3: python3 main.py
+Run the main entry point using Python 3: 
+```bash
+python3 main.py
+```
 
 Expected output:
 - Model comparison for Linear Regression, Ridge Regression, Random Forest
 - Rolling forecasts: expanding window and 60-month window
 - CSV files saved to results/model_comparison.csv and results/rolling_summary.csv
+
+## Data
+Raw macroeconomic variables and sector excess returns (2005–2025) are included
+in `data/raw/`. The processed dataset is automatically generated and saved to
+`data/processed/` when running `main.py`.
 
 ## Project Structure
 ```text
@@ -47,8 +53,10 @@ Model comparison on the test period (2019–2025) shows:
 - Random Forest  
   - Rotation hit rate: 17.7%  
   - Cumulative excess return vs SPY: −38.63%  
-  - Annualized Sharpe (excess): −0.28  
+  - Annualized Sharpe (excess): −0.28 
+
 ```
+Overall, none of the models consistently outperform the SPY benchmark, indicating limited exploitable predictability in sector returns, in line with market efficiency hypothesis.
 
 ## Requirements
 - Python 3.10+
