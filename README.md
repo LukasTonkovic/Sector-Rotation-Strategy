@@ -60,4 +60,5 @@ Overall, none of the models consistently outperform the SPY benchmark, indicatin
 
 ## Requirements
 - Python 3.10+
-- pandas, numpy, scikit-learn, yfinance
+- pandas, numpy, scikit-learn, yfinance, matplotlib, jinja2
+
