@@ -11,3 +11,4 @@ __pycache__/
 # OS files
 .DS_Store
 
+results/table1_model_comparison.tex
