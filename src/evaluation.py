@@ -1,10 +1,4 @@
-"""
-Evaluation utilities for the Sector Rotation project.
 
-- Hit rate: how often the model picks the best-performing asset
-- Rotation strategy backtest: monthly rotation into the asset with highest predicted excess return
-- Sharpe ratio and cumulative excess return of the strategy
-"""
 
 from typing import Dict
 
@@ -13,10 +7,6 @@ import pandas as pd
 
 
 def _get_trade_assets(columns, exclude_spy: bool = True):
-    """
-    Helper: which target columns we trade on.
-    Usually we exclude SPY (it is the benchmark).
-    """
     if exclude_spy:
         return [c for c in columns if c != "target_SPY"]
     return list(columns)
@@ -27,13 +17,7 @@ def compute_hit_rate(
     y_pred: np.ndarray,
     exclude_spy: bool = True,
 ) -> float:
-    """
-    Compute the fraction of months where the model correctly
-    predicts the best-performing asset (among traded assets).
-
-    y_true: DataFrame with columns = target_* and index = months
-    y_pred: ndarray of same shape as y_true.values
-    """
+   
     trade_cols = _get_trade_assets(list(y_true.columns), exclude_spy=exclude_spy)
 
     # Restrict to traded assets
@@ -56,24 +40,9 @@ def backtest_rotation_strategy(
     exclude_spy: bool = True,
     freq: str = "M",
 ) -> Dict[str, object]:
-    """
-    Backtest a simple rotation strategy:
-
-    - Each month, pick the asset with the highest predicted excess return
-      (among traded assets, usually GLD, VNQ, XLE, XLF, XLK).
-    - Realized strategy return for that month = actual excess return of that asset.
-
-    Returns:
-        dict with:
-            - "strategy_returns": Series of monthly excess returns
-            - "cumulative_excess_return": float
-            - "annualized_sharpe": float
-            - "hit_rate": float
-            - "selection": DataFrame with chosen assets per month
-    """
     trade_cols = _get_trade_assets(list(y_true.columns), exclude_spy=exclude_spy)
 
-    # Subset arrays: only traded assets (without SPY)
+    # Subset arrays: only traded assets (no SPY)
     true_vals = y_true[trade_cols].to_numpy()
     pred_vals = y_pred[:, [y_true.columns.get_loc(c) for c in trade_cols]]
 
@@ -98,7 +67,7 @@ def backtest_rotation_strategy(
     # Cumulative excess return vs SPY
     cumulative_excess_return = float((1 + strategy_returns).prod() - 1)
 
-    # Annualized Sharpe (benchmark excess = 0)
+    # Annualized Sharpe 
     mean_r = strategy_returns.mean()
     std_r = strategy_returns.std(ddof=1)
 
@@ -112,7 +81,7 @@ def backtest_rotation_strategy(
     else:
         annualized_sharpe = np.nan
 
-    # Hit-rate (using helper)
+    # Hit-rate 
     hit_rate = compute_hit_rate(y_true, y_pred, exclude_spy=exclude_spy)
 
     # Selection DataFrame: which asset chosen each month
@@ -132,10 +101,6 @@ def backtest_rotation_strategy(
         "selection": selection,
     }
 def compute_directional_accuracy(y_true: pd.DataFrame, y_pred: np.ndarray):
-    """
-    Compute % of times the model predicts the correct sign
-    (positive/negative) for each asset.
-    """
     results = []
     true_vals = y_true.to_numpy()
 
@@ -161,10 +126,6 @@ from .preprocessing import load_features_targets
 from .models import run_rolling_forecast
 
 
-# -------------------------
-# Report helpers (figures)
-# Saves outputs to ./results (per course structure)
-# -------------------------
 
 BASE_DIR = Path(__file__).resolve().parents[1]  # src -> project root
 RESULTS_DIR = BASE_DIR / "results"
@@ -195,9 +156,6 @@ def _load_results_csvs():
 
 
 def plot_figure1_cum_excess_by_model(save_path: Path | None = None) -> Path:
-    """
-    Figure 1: Cumulative excess return vs SPY by model (bar chart).
-    """
     model_df, _ = _load_results_csvs()
     df = model_df.sort_values("cumulative_excess_return", ascending=False)
 
@@ -216,12 +174,6 @@ def plot_figure1_cum_excess_by_model(save_path: Path | None = None) -> Path:
 
 
 def _monthly_excess_series(Y_true: pd.DataFrame, Y_pred: pd.DataFrame) -> pd.Series:
-    """
-    Monthly excess return series of the rotation strategy vs SPY:
-    - pick the asset with highest predicted return each month (from Y_pred)
-    - take its realized return (from Y_true)
-    - subtract SPY realized return
-    """
     if "target_SPY" not in Y_true.columns:
         raise ValueError("Expected 'target_SPY' in Y_true columns for benchmark.")
 
@@ -238,12 +190,6 @@ def _monthly_excess_series(Y_true: pd.DataFrame, Y_pred: pd.DataFrame) -> pd.Ser
 
 
 def plot_figure2_cum_excess_over_time(save_path: Path | None = None) -> Path:
-    """
-    Figure 2: Cumulative excess return vs SPY OVER TIME (line plot)
-    for expanding vs 60-month rolling window forecasts.
-
-    This does NOT modify main.py; it recomputes the rolling forecasts inside evaluation.py.
-    """
     # Load the full dataset (features + targets)
     X, Y = load_features_targets()
 
@@ -282,9 +228,6 @@ def plot_figure2_cum_excess_over_time(save_path: Path | None = None) -> Path:
 
 
 def plot_figure3_sharpe_by_model(save_path: Path | None = None) -> Path:
-    """
-    Figure 3: Annualized excess Sharpe ratio by model (bar chart).
-    """
     model_df, _ = _load_results_csvs()
     df = model_df.sort_values("annualized_sharpe", ascending=False)
 
@@ -303,10 +246,6 @@ def plot_figure3_sharpe_by_model(save_path: Path | None = None) -> Path:
 
 
 def generate_report_artifacts() -> dict:
-    """
-    Convenience function: generates all figures into ./results.
-    Returns paths.
-    """
     fig1 = plot_figure1_cum_excess_by_model()
     fig2 = plot_figure2_cum_excess_over_time()
     fig3 = plot_figure3_sharpe_by_model()

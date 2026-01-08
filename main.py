@@ -98,7 +98,7 @@ def main():
         ]
     )
 
-    # Expanding window forecast 
+    # Expanding window forecast of Linear Regression
     # Rolling forecast where the training window keeps expanding over time
     Y_test_exp, Y_pred_exp = run_rolling_forecast(
         rolling_model,

@@ -1,13 +1,3 @@
-"""
-Models for the Sector Rotation project.
-
-- Load features (macro) and targets (next-month excess returns)
-- Time-series train/test split
-- Fit and compare multiple models:
-    * Linear Regression
-    * Ridge Regression
-    * Random Forest Regressor
-"""
 
 from typing import Dict, Tuple
 from sklearn.pipeline import Pipeline
@@ -27,12 +17,7 @@ def time_series_train_test_split(
     Y: pd.DataFrame,
     split_period: str = "2018-12",
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """
-    Time-series split: all months <= split_period go to train,
-    all months > split_period go to test.
-
-    Index is a PeriodIndex (monthly), e.g. 2005-02, 2019-01, etc.
-    """
+    
     train_mask = X.index <= split_period
     test_mask = X.index > split_period
 
@@ -48,12 +33,7 @@ def evaluate_predictions(
     Y_true: pd.DataFrame,
     Y_pred,
 ) -> pd.DataFrame:
-    """
-    Compute per-asset MSE and R^2.
-
-    Y_true: DataFrame (n_samples, n_assets)
-    Y_pred: ndarray (n_samples, n_assets)
-    """
+   
     asset_names = list(Y_true.columns)
 
     mse_values = mean_squared_error(
@@ -79,16 +59,7 @@ def run_single_model(
     model_name: str,
     split_period: str = "2018-12",
 ) -> Dict[str, object]:
-    """
-    Generic pipeline for one model:
-    - load X, Y
-    - time-series split
-    - fit model
-    - predict on test
-    - compute per-asset metrics
-
-    Returns a dict with model and results.
-    """
+   
     X, Y = load_features_targets()
     X_train, X_test, Y_train, Y_test = time_series_train_test_split(
         X, Y, split_period=split_period
@@ -112,12 +83,7 @@ def run_single_model(
 
 
 def run_all_models(split_period: str = "2018-12") -> Dict[str, Dict[str, object]]:
-    """
-    Run and compare multiple models.
-
-    Returns:
-        dict: model_name -> results dict (as in run_single_model)
-    """
+    
     models = {
         "LinearRegression": Pipeline([
             ("scaler", StandardScaler()),
@@ -153,19 +119,7 @@ def run_rolling_forecast(
     Y: pd.DataFrame,
     train_window: int = None
 ):
-    """
-    Rolling (or expanding) window forecast.
     
-    model: an sklearn estimator (LinearRegression, Ridge, RandomForest, etc.)
-    X, Y: full dataset (with Date/Period index)
-    train_window:
-        - None → expanding window (starts from beginning)
-        - integer (e.g. 60) → rolling window of last 'train_window' months
-
-    Returns:
-        Y_test_roll: DataFrame of actual next-month returns
-        Y_pred_roll: DataFrame of predicted returns (same index)
-    """
 
     dates = X.index
     preds = []
@@ -220,9 +174,7 @@ def run_rolling_forecast(
 
 
 def run_baseline_linear_regression(split_period: str = "2018-12"):
-    """
-    For backward compatibility: just run LinearRegression (optional to keep).
-    """
+    
     res = run_single_model(LinearRegression(), "LinearRegression", split_period)
     return (
         res["model"],
@@ -236,7 +188,7 @@ def run_baseline_linear_regression(split_period: str = "2018-12"):
 
 
 if __name__ == "__main__":
-    # Quick test: run all models and print per-asset metrics for each
+    
     all_results = run_all_models()
     for name, res in all_results.items():
         print(f"\nModel: {name}")

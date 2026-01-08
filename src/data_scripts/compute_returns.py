@@ -1,22 +1,3 @@
-"""
-Compute monthly returns and SPY-relative excess returns
-from monthly adjusted close prices.
-
-Input:
-    data/raw/asset_prices_adj_close_2005_2025.csv
-        - columns: XLK, XLE, XLF, GLD, VNQ
-        - index: Date (monthly)
-
-Output:
-    data/raw/returns_2005_2025.csv
-        - columns: SPY, XLK, XLE, XLF, GLD, VNQ
-        - index: Date (monthly returns)
-
-    data/raw/excess_returns_2005_2025.csv
-        - columns: SPY, XLK, XLE, XLF, GLD, VNQ
-        - index: Date
-        - SPY column is 0 (benchmark), others are excess vs SPY
-"""
 
 from pathlib import Path
 import pandas as pd
@@ -34,17 +15,12 @@ EXCESS_FILE = DATA_RAW_DIR / "excess_returns_2005_2025.csv"
 
 
 def load_prices():
-    """Load ETF adjusted close prices from CSV."""
     df = pd.read_csv(PRICES_FILE, parse_dates=["Date"])
     df = df.set_index("Date").sort_index()
     return df
 
 
 def download_spy_monthly(start_date, end_date=None):
-    """
-    Download monthly adjusted close prices for SPY
-    for a given date range.
-    """
     data = yf.download(
         tickers=["SPY"],
         start=start_date,
@@ -62,10 +38,6 @@ def download_spy_monthly(start_date, end_date=None):
 
 
 def compute_returns(prices, spy_prices):
-    """
-    Given ETF prices and SPY prices (both with Date index),
-    compute monthly returns and excess returns vs SPY.
-    """
     # Combine ETFs and SPY into same DataFrame
     df = prices.copy()
     df["SPY"] = spy_prices

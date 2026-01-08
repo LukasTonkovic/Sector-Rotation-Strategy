@@ -3,9 +3,7 @@ import pandas as pd
 from fredapi import Fred
 import os
 
-# -------------------------------------------------------
-# Load FRED API key directly from .env file inside project root
-# -------------------------------------------------------
+
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 ENV_PATH = BASE_DIR / ".env"

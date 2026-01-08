@@ -1,7 +1,4 @@
-"""
-Download monthly adjusted close prices for selected ETFs
-and save them to data/raw/asset_prices_adj_close_2005_2025.csv
-"""
+
 
 from pathlib import Path
 import pandas as pd
@@ -18,10 +15,6 @@ START_DATE = "2005-01-01"
 END_DATE = None  # None = up to today
 
 def download_monthly_adj_close(tickers, start, end=None):
-    """
-    Downloads monthly adjusted close prices for the given tickers.
-    Returns a DataFrame where columns = tickers, index = Date.
-    """
     data = yf.download(
         tickers=tickers,
         start=start,
