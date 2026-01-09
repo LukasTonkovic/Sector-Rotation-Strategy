@@ -30,9 +30,9 @@ Sector-Rotation-Strategy/
 │   ├── evaluation.py     # Evaluation metrics & backtesting
 │   └── data_scripts/      # Data download and preprocessing scripts
 ├── data/                  # Raw and processed datasets
-├── results/               # Output CSV files
+├── results/               # Output CSV files and figures
 ├── notebooks/             # Optional exploratory notebooks
-├── figures/               # Figures for report
+├── project_report.pdf/    # Final report
 ├── requirements.txt       # Project dependencies
 └── README.md              # Setup and usage instructions
 ```
@@ -60,5 +60,5 @@ Overall, none of the models consistently outperform the SPY benchmark, indicatin
 
 ## Requirements
 - Python 3.10+
-- pandas, numpy, scikit-learn, yfinance, matplotlib, jinja2
+- pandas, numpy, scikit-learn, yfinance, matplotlib, jinja2 (see requirements.txt)
 
